@@ -24,6 +24,21 @@ interface SearchDocument {
 const DATA_DIR = path.join(__dirname, "..", "..", "data");
 const OUTPUT_PATH = path.join(__dirname, "..", "public", "search-index.json");
 
+function cleanForSearch(markdown: string, maxLen: number): string {
+  let text = markdown;
+  text = text.replace(/!\[([^\]]*)\]\([^)]*\)/g, "");          // images
+  text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");         // links -> text
+  text = text.replace(/<[^>]+>/g, "");                          // HTML tags
+  text = text.replace(/https?:\/\/\S+/g, "");                  // bare URLs
+  text = text.replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, "$1");   // bold/italic
+  text = text.replace(/^#{1,6}\s+/gm, "");                     // heading markers
+  text = text.replace(/```[\s\S]*?```/g, "");                  // code blocks
+  text = text.replace(/`([^`]+)`/g, "$1");                     // inline code
+  text = text.replace(/\n{3,}/g, "\n\n");                       // collapse newlines
+  text = text.replace(/[ \t]+/g, " ");                          // collapse spaces
+  return text.trim().slice(0, maxLen);
+}
+
 function main() {
   console.log("Generating search index...");
 
@@ -37,10 +52,10 @@ function main() {
     slug: org.slug,
     name: org.name,
     tagline: org.tagline,
-    description: org.description,
+    description: cleanForSearch(org.description, 500),
     ideasSnippet:
       org.ideas_content && org.ideas_content !== "None"
-        ? org.ideas_content
+        ? cleanForSearch(org.ideas_content, 1500)
         : "",
     tech_tags: org.tech_tags,
     topic_tags: org.topic_tags,

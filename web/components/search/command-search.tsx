@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Lightbulb } from "lucide-react";
+import { Building2, Lightbulb, Loader2 } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,7 +12,79 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import type { SearchDocument } from "@/lib/types";
-import type { FuseResult, default as FuseType } from "fuse.js";
+import type { FuseResult, FuseResultMatch, default as FuseType } from "fuse.js";
+
+function extractSnippet(
+  text: string,
+  matchRange: readonly [number, number],
+  contextChars = 60
+): string {
+  const [start, end] = matchRange;
+  const snippetStart = Math.max(0, start - contextChars);
+  const snippetEnd = Math.min(text.length, end + contextChars);
+  let snippet = text.slice(snippetStart, snippetEnd).replace(/\n/g, " ");
+  if (snippetStart > 0) snippet = "..." + snippet;
+  if (snippetEnd < text.length) snippet = snippet + "...";
+  return snippet;
+}
+
+function getMatchContext(result: FuseResult<SearchDocument>): {
+  type: "org" | "ideas";
+  contextLine: string;
+} {
+  const matches = result.matches || [];
+  const hasIdeas = !!result.item.ideasSnippet;
+
+  const findMatch = (key: string): FuseResultMatch | undefined =>
+    matches.find((m) => m.key === key);
+
+  const nameMatch = findMatch("name");
+  const taglineMatch = findMatch("tagline");
+  const techMatch = findMatch("tech_tags");
+  const topicMatch = findMatch("topic_tags");
+  const descMatch = findMatch("description");
+  const ideasMatch = findMatch("ideasSnippet");
+
+  // Name/tagline match → show tagline, link to org
+  if (nameMatch || taglineMatch) {
+    return { type: "org", contextLine: result.item.tagline };
+  }
+
+  // Tech tag match → show tags, link to org
+  if (techMatch) {
+    return {
+      type: "org",
+      contextLine: `Technologies: ${result.item.tech_tags.join(", ")}`,
+    };
+  }
+
+  // Topic tag match → show tags, link to org
+  if (topicMatch) {
+    return {
+      type: "org",
+      contextLine: `Topics: ${result.item.topic_tags.join(", ")}`,
+    };
+  }
+
+  // Description match → show snippet, link to org
+  if (descMatch?.value && descMatch.indices?.length) {
+    return {
+      type: "org",
+      contextLine: extractSnippet(descMatch.value, descMatch.indices[0]),
+    };
+  }
+
+  // Ideas match → show snippet, link to ideas page
+  if (ideasMatch?.value && ideasMatch.indices?.length && hasIdeas) {
+    return {
+      type: "ideas",
+      contextLine: extractSnippet(ideasMatch.value, ideasMatch.indices[0]),
+    };
+  }
+
+  // Fallback
+  return { type: "org", contextLine: result.item.tagline };
+}
 
 export function CommandSearch({
   open,
@@ -24,13 +96,20 @@ export function CommandSearch({
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<FuseResult<SearchDocument>[]>([]);
-  const [searcher, setSearcher] = useState<FuseType<SearchDocument> | null>(null);
+  const [searcher, setSearcher] = useState<FuseType<SearchDocument> | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
 
   // Lazy load the search index on first open
   useEffect(() => {
     if (open && !searcher) {
+      setLoading(true);
       import("@/lib/search").then(({ getSearcher }) => {
-        getSearcher().then(setSearcher);
+        getSearcher().then((s) => {
+          setSearcher(s);
+          setLoading(false);
+        });
       });
     }
   }, [open, searcher]);
@@ -41,8 +120,8 @@ export function CommandSearch({
       setResults([]);
       return;
     }
-    const results = searcher.search(query, { limit: 12 });
-    setResults(results);
+    const r = searcher.search(query, { limit: 12 });
+    setResults(r);
   }, [query, searcher]);
 
   const handleSelect = useCallback(
@@ -58,6 +137,15 @@ export function CommandSearch({
     [router, onOpenChange]
   );
 
+  // Clear query on close
+  const handleOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (!isOpen) setQuery("");
+      onOpenChange(isOpen);
+    },
+    [onOpenChange]
+  );
+
   // Keyboard shortcut
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -71,7 +159,11 @@ export function CommandSearch({
   }, [open, onOpenChange]);
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <CommandDialog
+      open={open}
+      onOpenChange={handleOpenChange}
+      shouldFilter={false}
+    >
       <CommandInput
         placeholder="Search organizations, technologies, project ideas..."
         value={query}
@@ -79,54 +171,44 @@ export function CommandSearch({
       />
       <CommandList>
         <CommandEmpty>
-          {!searcher ? "Loading search index..." : "No results found."}
+          {loading ? (
+            <div className="flex items-center justify-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">Loading...</span>
+            </div>
+          ) : (
+            "No results found."
+          )}
         </CommandEmpty>
 
         {results.length > 0 && (
-          <>
-            <CommandGroup heading="Organizations">
-              {results.map((r) => (
+          <CommandGroup heading="Results">
+            {results.map((r) => {
+              const { type, contextLine } = getMatchContext(r);
+              const Icon = type === "ideas" ? Lightbulb : Building2;
+              const label =
+                type === "ideas"
+                  ? `${r.item.name} — Ideas`
+                  : r.item.name;
+
+              return (
                 <CommandItem
-                  key={`org-${r.item.slug}`}
-                  value={`org-${r.item.slug}`}
-                  onSelect={() => handleSelect(r.item.slug, "org")}
+                  key={`${type}-${r.item.slug}`}
+                  value={`${type}-${r.item.slug}`}
+                  onSelect={() => handleSelect(r.item.slug, type)}
                   className="flex items-center gap-2"
                 >
-                  <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  <div className="flex flex-col">
-                    <span className="font-medium">{r.item.name}</span>
+                  <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-medium">{label}</span>
                     <span className="text-xs text-muted-foreground line-clamp-1">
-                      {r.item.tagline}
+                      {contextLine}
                     </span>
                   </div>
                 </CommandItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="Project Ideas">
-              {results
-                .filter((r) => r.item.ideasSnippet)
-                .slice(0, 8)
-                .map((r) => (
-                  <CommandItem
-                    key={`ideas-${r.item.slug}`}
-                    value={`ideas-${r.item.slug}`}
-                    onSelect={() => handleSelect(r.item.slug, "ideas")}
-                    className="flex items-center gap-2"
-                  >
-                    <Lightbulb className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">
-                        {r.item.name} — Ideas
-                      </span>
-                      <span className="text-xs text-muted-foreground line-clamp-1">
-                        {r.item.tech_tags.slice(0, 3).join(", ")}
-                      </span>
-                    </div>
-                  </CommandItem>
-                ))}
-            </CommandGroup>
-          </>
+              );
+            })}
+          </CommandGroup>
         )}
       </CommandList>
     </CommandDialog>

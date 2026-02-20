@@ -20,15 +20,17 @@ export async function getSearcher(): Promise<Fuse<SearchDocument>> {
 
   fuseInstance = new Fuse(docs, {
     keys: [
-      { name: "name", weight: 3 },
-      { name: "tagline", weight: 2 },
-      { name: "description", weight: 1.5 },
-      { name: "ideasSnippet", weight: 1 },
-      { name: "tech_tags", weight: 1 },
-      { name: "topic_tags", weight: 1 },
+      { name: "name", weight: 5 },
+      { name: "tagline", weight: 3 },
+      { name: "tech_tags", weight: 2 },
+      { name: "topic_tags", weight: 2 },
+      { name: "description", weight: 1 },
+      { name: "ideasSnippet", weight: 0.5 },
     ],
-    threshold: 0.3,
+    threshold: 0.2,
     includeMatches: true,
+    includeScore: true,
+    ignoreLocation: true,
     minMatchCharLength: 2,
   });
 
