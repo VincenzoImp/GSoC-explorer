@@ -37,10 +37,10 @@ function main() {
     slug: org.slug,
     name: org.name,
     tagline: org.tagline,
-    description: org.description.slice(0, 500),
+    description: org.description,
     ideasSnippet:
       org.ideas_content && org.ideas_content !== "None"
-        ? org.ideas_content.slice(0, 2000)
+        ? org.ideas_content
         : "",
     tech_tags: org.tech_tags,
     topic_tags: org.topic_tags,
