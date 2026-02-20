@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
@@ -56,7 +57,7 @@ export function Header({
           >
             <span className="flex items-center gap-2">
               <Search className="h-3.5 w-3.5" />
-              Search organizations...
+              Search...
             </span>
             <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium sm:flex">
               <span className="text-xs">&#8984;</span>K
@@ -71,6 +72,8 @@ export function Header({
           >
             <Search className="h-4 w-4" />
           </Button>
+
+          <ThemeToggle />
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>

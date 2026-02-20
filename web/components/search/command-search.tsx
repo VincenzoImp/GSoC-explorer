@@ -165,7 +165,7 @@ export function CommandSearch({
       shouldFilter={false}
     >
       <CommandInput
-        placeholder="Search organizations, technologies, project ideas..."
+        placeholder="Search organizations, ideas, technologies..."
         value={query}
         onValueChange={setQuery}
       />
