@@ -1,0 +1,6 @@
+requests>=2.32
+beautifulsoup4>=4.12
+trafilatura>=2.0
+lxml_html_clean
+markdownify>=1.2
+playwright>=1.40

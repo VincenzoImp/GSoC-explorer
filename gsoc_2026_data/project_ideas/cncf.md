@@ -1,0 +1,438 @@
+# CNCF — Project Ideas
+
+**Source:** https://github.com/cncf/mentoring/blob/main/programs/summerofcode/2026.md
+**Scraped:** 2026-02-20T11:48:56.948671
+
+---
+
+## Project Ideas
+
+If you are a project maintainer and are considering mentoring during the GSoC 2026 cycle, please, submit your ideas below using the template.
+
+[Google Summer of Code 2026 Announcement](https://groups.google.com/g/google-summer-of-code-discuss/c/D-aU3nHnGBQ/m/VU7lwF_MBQAJ)  
+[Google Summer of Code Timeline](https://developers.google.com/open-source/gsoc/timeline)
+
+Key GSoC 2026 dates:
+* Organizations application period: Monday, Jan 19, to Tuesday, Feb 3, 2026
+* CNCF Project proposals submissions recommendation: Wednesday Jan 14, 2026
+  **Note**, proposals can still be submitted after this recommended date, but the Mentorship team needs time to evaluate the proposals and package our application. The more proposals we have, the stronger our org application will be.
+
+You can find the project ideas from previous year [here](./2025.md).
+
+> **NOTE:** Please note that GSoC is a program known for its strict deadlines. In addition to responding to your mentee on time, you will be required to submit evaluations on time. Failures to meet the deadlines might affect CNCF's future participation in GSoC.
+
+Linux Foundation [Guidance Regarding Use of Generative AI Tools for Open Source Software Development](https://www.linuxfoundation.org/legal/generative-ai)
+
+---
+
+### Template
+
+```
+#### CNCF Project Name
+
+##### Project Title
+
+- Description:
+- Expected Outcome:
+- Recommended Skills:
+- Expected project size: # one of small (~90 hour projects), medium (~175 hour projects) and large (~350 hour projects)
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - Jane Doe (@jane-github, jane@email.address) - primary
+  - John Doe (@john-github, john@email.address)
+- Upstream Issue (URL):
+```
+
+---
+
+## Ideas
+
+
+<!-- TOC -->
+* [Drasi](#drasi)
+  * [Reactive Agents with Drasi & Dapr](#reactive-agents-with-drasi-dapr)
+* [Inspektor Gadget](#inspektor-gadget)
+  * [Security-focused UX Improvements for the Inspektor Gadget kubernetes-sigs/headlamp Plugin](#security-focused-ux-improvements-for-the-inspektor-gadget-kubernetes-sigsheadlamp-plugin)
+* [Jaeger](#jaeger)
+  * [AI-Powered Trace Analysis: Phase 2 - Self-Service "Skills" Framework](#ai-powered-trace-analysis-phase-2---self-service-skills-framework)
+* [kgateway](#kgateway)
+  * [Benchmarking and Performance Evaluation of Inference Routing Extensions in kgateway](#benchmarking-and-performance-evaluation-of-inference-routing-extensions-in-kgateway)
+* [KitOps](#kitops)
+  * [Enrich KitOps Integration Guides with Kubeflow Model Registry, Argo Workflows, Kyverno](#enrich-kitops-integration-guides-with-kubeflow-model-registry-argo-workflows-kyverno)
+* [Kmesh](#kmesh)
+  * [Kmesh Dashboard for Simplified Service Mesh Management](#kmesh-dashboard-for-simplified-service-mesh-management)
+* [[kpt](https://kpt.dev/)](#kpt)
+  * [Build e-commerce example kpt package](#build-e-commerce-example-kpt-package)
+* [ModelPack](#modelpack)
+  * [Unified transformer specification and its auto-generation method for the existing models](#unified-transformer-specification-and-its-auto-generation-method-for-the-existing-models)
+* [OpenKruise](#openkruise)
+  * [Alternative progressive delivery of deployment without changing strategy to Recreate](#alternative-progressive-delivery-of-deployment-without-changing-strategy-to-recreate)
+* [OpenTelemetry](#opentelemetry)
+  * [OTTL stabilization and 1.0 offering](#ottl-stabilization-and-10-offering)
+* [OSCAL Compass](#oscal-compass)
+  * [OSCAL documents signing](#oscal-documents-signing)
+* [PipeCD](#pipecd)
+  * [GCP Cloud Run plugin for pipedv1](#gcp-cloud-run-plugin-for-pipedv1)
+* [WasmEdge](#wasmedge)
+  * [Implement Custom Section Parsing and Branch Hinting proposal](#implement-custom-section-parsing-and-branch-hinting-proposal)
+  * [Refine the WASM instruction structure in WasmEdge](#refine-the-wasm-instruction-structure-in-wasmedge)
+  * [WASM Exception-Handling proposal for AOT/JIT in WasmEdge](#wasm-exception-handling-proposal-for-aotjit-in-wasmedge)
+<!-- TOC -->
+
+#### Drasi
+
+##### Reactive Agents with Drasi & Dapr
+
+- Description: Current AI Agents are mostly "passive"—they wait for a user to chat with them. To build "Ambient Agents" that can autonomously monitor and react to the world (e.g., "Wake up when a high-value order is stuck"), developers need to bridge Real-Time Change Detection with Resilient Agent Runtimes.
+
+- This project connects two CNCF ecosystem projects: **Drasi** (Change Detection) and **Dapr Agents** (Agent Framework). The goal is to build a unified Python-based integration layer that allows Dapr Agents to dynamically "sense" their environment. The student will build a "Smart Router" reaction that will allow Drasi to send events to Dapr Pub/Sub as standard CloudEvents, and update the Dapr Agents SDK to make subscribing to these events a one-line code experience. This enables "Scale-to-Zero" architectures where agents only wake up when specific data conditions are met, eliminating inefficient polling or fragile persistent socket connections.
+
+- Expected Outcome:
+  - **Drasi Router Reaction (Python):** A configurable microservice that routes Drasi events to Dapr Pub/Sub topics based on dynamic rules and hosts an embedded MCP (Model Context Protocol) Server for agents to discover queries at runtime.
+  - **Dapr Agents SDK Extensions:** A Python module (`dapr_agents.extensions.drasi`) containing Pydantic models for Drasi events and a `@drasi_trigger` decorator that handles CloudEvent validation and subscription automatically.
+  - **Ambient Agent Demo:** A complete end-to-end reference architecture (e.g., a "Proactive Support Agent") that detects critical database changes and trigger a Dapr Agent workflow to resolve them.
+
+- Recommended Skills:
+  - Python (Intermediate/Advanced)
+  - Kubernetes & Docker (Intermediate)
+  - Understanding of Microservices and Pub/Sub
+
+- Expected project size: Large
+
+- Mentor(s):
+  - Aman Singh (@amansinghoriginal, singh.amandeep@microsoft.com) from Drasi - primary
+  - Casper Nielsen (@CasperGN, casper@diagrid.io) from Dapr Agents
+
+- Upstream Issue (URL): https://github.com/drasi-project/drasi-platform/issues/383
+
+
+#### Inspektor Gadget
+
+##### Security-focused UX Improvements for the Inspektor Gadget kubernetes-sigs/headlamp Plugin
+
+- Description:
+ This project improves the user experience of the Inspektor Gadget plugin for Headlamp with a security-first perspective. The work focuses on four areas: (1) improving interactive traffic visualization so operators can understand and investigate cluster communication patterns, (2) adding an ebpftop-style view to monitor resource usage and runtime status of eBPF gadgets (to make observability overhead transparent), (3) improving DNS debugging workflows with security-relevant signals (failed lookups, retry storms, unexpected domains/resolutions), and (4) streamlining installation/onboarding with guided setup, prerequisite checks, and clearer error handling to reduce misconfiguration and unsafe permissioning. 
+
+- Expected Outcome:
+  - Improvements to an interactive traffic capture and visualization experience in Headlamp that helps operators understand and investigate cluster communication patterns.
+  - Improvements to a resource monitoring dashboard for eBPF programs/gadgets showing real-time and (where feasible) historical CPU/memory metrics to understand observability overhead.
+  - Improvements to DNS debugging UX that helps diagnose DNS failures and highlights security-relevant DNS behaviors (failed lookups, retry storms, unexpected domains/resolutions) scoped to relevant workloads/namespaces.
+  - Improvements to the Inspektor Gadget installation/onboarding experience with step-by-step guidance, prerequisite checks, actionable error messages, and troubleshooting assistance.
+  
+- Recommended Skills: 
+  TypeScript, React, UX design principles 
+  Optional Kubernetes fundamentals, networking concepts, eBPF fundamentals 
+
+- Expected project size: 
+  large (~350 hour projects) 
+- Mentor(s): 
+  - Ashu Ghildiyal (@ashu8912, ashughildiyal5@gmail.com) - primary
+  - Dor Serero (@dorser, dor.serero@gmail.com)
+  - Rene Dudfield (@illume, renesd@gmail.com) 
+
+- Upstream Issue (URL): 
+  - https://github.com/inspektor-gadget/headlamp-plugin/issues/17 
+
+
+#### Jaeger
+
+##### AI-Powered Trace Analysis: Phase 2 - Self-Service "Skills" Framework
+
+- **Description:** Jaeger is the industry-standard platform for distributed tracing. As microservice architectures grow complex, finding root causes in massive trace data becomes increasingly difficult. While Phase 1 of this initiative established a baseline AI assistant for natural language search, the system currently relies on hard-coded capabilities. This project (Phase 2\) aims to transform the Jaeger AI agent from a static chatbot into an extensible, user-programmable platform. The primary objective is to implement a "Self-Service Skills" framework, architecturally similar to "Claude Code Skills." This will allow end-users to teach the Jaeger AI new debugging workflows (e.g., "Analyze Critical Path" or "Detect N+1 Queries") by simply adding configuration files containing system prompts and logic rules, without needing to recompile the Jaeger binary. The applicant will build this extension within the Jaeger v2 (OpenTelemetry-based) architecture, utilizing **LangChainGo** to orchestrate interactions with Language Models (SLMs/LLMs). This project bridges the gap between generic AI reasoning and domain-specific observability expertise.
+- **Expected Outcome:**
+  - **Skills Engine Implementation:** A robust backend framework in Go that dynamically discovers, validates, and loads user-defined "Skills" (prompts and tool definitions) from configuration.
+  - **Smart Analysis Features:** A polished implementation of Natural Language Search and Contextual Trace Explanation that intelligently leverages these loaded skills.
+  - **Local-First Support:** Verified compatibility with local model runners (e.g., Ollama, Llama.cpp) to ensure deterministic performance without sending data to public clouds.
+  - **UI Integration:** Enhancements to the Jaeger React UI to expose these AI capabilities and visualize the "reasoning steps" taken by the agent.
+  - **Documentation:** A complete guide for users on "How to Author Custom AI Skills for Jaeger."
+- **Learning Opportunities:**
+  - **Agentic AI Architecture:** Learn to design stateful AI agents in Go that utilize "Tool Calling" and "Reasoning Loops" rather than simple text generation.
+  - **OpenTelemetry Internals:** Gain deep familiarity with the OpenTelemetry Collector architecture, as Jaeger v2 is built directly on top of it.
+  - **Cloud-Native Engineering:** Experience contributing to a graduated CNCF project, including navigating code reviews, writing design docs (RFDs), and adhering to open-source best practices.
+  - **Full-Stack Development:** Practical experience bridging a complex Go backend with a modern React frontend.
+- **Recommended Skills:**
+  - **Languages:** Strong proficiency in **Go (Golang)** is required. Experience with **TypeScript/React** is highly recommended.
+  - **AI/LLM:** Familiarity with LLM concepts (Prompt Engineering, RAG, Function Calling) and frameworks like LangChain.
+  - **Domain Knowledge:** Basic understanding of distributed systems, observability, or debugging workflows is beneficial.
+- **Expected project size:** Large (~350 hour projects)
+- **Mentors:**
+  - Jonah Kowall (@jkowall, jkowall@kowall.net)
+  - Yuri Shkuro (@yurishkuro, github@ysh.us)
+- Upstream Issue: https://github.com/jaegertracing/jaeger/issues/7827
+
+
+#### kgateway
+
+##### Benchmarking and Performance Evaluation of Inference Routing Extensions in kgateway
+
+- Description: kgateway provides inference routing capabilities based on the Kubernetes Gateway API Inference Extension project. This integration enables advanced behaviors such as model-aware routing, serving priority, and customizable load-balancing of self-hosted Generative AI models.
+
+  However, there is currently no standardized or reproducible way to evaluate the performance impact of these inference routing extensions.
+
+  This project aims to design and implement a comprehensive benchmarking framework to measure the latency, throughput, and resource overhead introduced by inference routing extensions in kgateway. The benchmarks will help maintainers and users understand performance tradeoffs, validate optimizations, and guide future architectural decisions.
+
+- Expected Outcome:
+  - A reproducible benchmarking framework for inference routing extensions in kgateway
+  - Benchmark scenarios covering:
+    - Baseline gateway routing vs inference-enabled routing
+    - Different inference extensions and EPP configurations
+    - Request/response and streaming inference workloads
+  - Collected metrics including:
+    - End-to-end latency (p50 / p95 / p99)
+    - Throughput
+    - CPU and memory overhead
+  - Automated benchmark execution (e.g., via CI or documented scripts)
+  - Documentation describing benchmark methodology, results interpretation, and best practices
+
+- Recommended Skills:
+  - Go
+  - Kubernetes
+  - Familiarity with gateways or networking concepts
+  - Basic understanding of AI inference workloads is a plus
+
+- Expected project size:
+  Medium (~175 hour projects)
+
+- Mentor(s):
+  - Primary Mentor: Nina Polshakova (@npolshakova, nina.polshakova@solo.io)
+  - Secondary Mentor: Daneyon Hansen (@danehans, daneyon.hansen@solo.io)
+
+- Upstream Issue (URL):
+  https://github.com/kgateway-dev/kgateway/issues/12289
+
+
+#### KitOps
+
+##### Enrich KitOps Integration Guides with Kubeflow Model Registry, Argo Workflows, Kyverno
+
+- Description: KitOps enables OCI-based packaging and distribution of ML artifacts such as models, datasets, and configurations. Kubeflow’s Model Registry supports OCI-based storage, which aligns well with KitOps’ design. However, there is currently no standardized guidance on how to use KitOps with the Kubeflow Model Registry. This project will define documentation explaining how to set up and use KitOps for model registration, retrieval, and lifecycle management within a Kubeflow environment. The work will cover setup, usage patterns, and best practices, with optional references to extending these workflows to related tools such as Argo Workflows. There is also potential for a guide on how to extend policy engines for ML workflows with Kyverno. 
+
+- Expected Outcome:
+  - Documentation describing how to use KitOps with Kubeflow Model Registry
+  - Step-by-step guides for model registration, retrieval, and management
+  - tutorial
+- Recommended Skills:
+  - Python
+  - Golang
+  - Technical Writing
+- Expected project size: small
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - Gorkem Ercan (@gorkem, gorkem.ercan@gmail.com) - primary
+  - Angel Misevski (@amisevsk, amisevsk@gmail.com)
+- Upstream Issue (URL): https://github.com/kitops-ml/kitops/issues/858
+
+
+#### Kmesh
+
+##### Kmesh Dashboard for Simplified Service Mesh Management
+
+- Description: In discussions with developers and end-users, we have received numerous comments indicating that Kmesh presents an excessively high barrier to use. For example, the use of waypoints encompasses three levels of granularity: Namespace, Service, and Workload. Furthermore, certain traffic management policies necessitate editing the Envoy filter. Following discussions on this matter during the community meeting, it was decided to incorporate a Kmesh dashboard into the Kmesh project. This will lower the barrier to using Kmesh through an interactive interface.
+- Expected Outcome:
+  - A user-friendly dashboard that simplifies Kmesh operations through intuitive UI workflows
+  - One-click or guided waypoint installation across Namespace, Service, and Workload levels with clear visual feedback
+  - Interactive service topology map (similar to Kiali) showing service dependencies, traffic flow, and health status
+  - Simplified circuit breaker configuration interface with preset templates and real-time validation
+  - Rate limiting configuration with visual policy builder and immediate feedback on applied rules
+  - Integrated metrics dashboard showing key service mesh performance indicators (latency, error rates, throughput)
+  - Built-in authentication support with role-based access control (RBAC) for secure dashboard access
+  - Comprehensive documentation and user guides for all dashboard features
+- Recommended Skills: TypeScript, React, Kubernetes, Service Mesh concepts, UX/UI design principles
+  TypeScript, React, Kubernetes, Service Mesh concepts, UX/UI design principles
+- Expected project size: medium
+  - ZhenCheng Li(@LiZhenCheng9527, leezhencheng6@gmail.com) - primary,
+  - Zhonghu Xu (@hzxuzhonghu, zhhxu2011@gmail.com),
+  - Zengzeng Yao(@yaozengzeng, yaozengzeng@huawei.com)
+- Upstream Issue (URL): https://github.com/kmesh-net/kmesh/issues/1552
+
+
+#### [kpt](https://kpt.dev/)
+
+[kpt](https://kpt.dev/) is a toolchain that allows users to cutomize kubernets packages declaratively. kpt uses a
+[configuration as data](https://cloud.google.com/blog/products/containers-kubernetes/understanding-configuration-as-data-in-kubernetes)
+approach for customization. The user specifies their customization changes as data in yaml files and kpt updates
+the source package by applying the customization to the kubernetes package. Unlike templating tools such as helm,
+there are no costomization directives in the source package itself.
+
+Currently, complete examples for using kpt are in specialized domains such as telecommunication management, which 
+are difficult to understand without familiarity with that domain. Other examples such as those int eh documentation 
+are rather piecemeal and don't give a complete picture of the power of kpt. The purpose of this project is to 
+provide a complete example that demonstrates the power of kpt in a domain that is more widely understood.
+
+##### Build e-commerce example kpt package
+
+In this project, the contributor will take a complete e-commerce application such as [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo)
+and package it as a kpt package. The contributor will then show how the example can be customized using the kpt 
+toolchain in a number of ways such as:
+
+1. Change from online boutique to online florist or online car accessory site
+1. Language and currency localization
+1. Sales Tax/VAT localization
+1. Deployment configuration (Small/medium/large)
+
+
+- Description: Use an example e-commerce application and create the related kpt package with the description how to deploy the application.
+- Expected Outcome: The kpt file and related documentation of an e-commerce example application are contributed to kpt
+- Recommended Skills: Capability to learn, basic cloud native skills
+- Expected project size: small (~90 hours)
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - Liam Fallon (@liamfallon) - primary
+  - Ciaran Johnston (@ciaranjohnston)
+  - Gergely Csatari (@CcsatariGergely)
+- Upstream Issue (URL): https://github.com/kptdev/kpt/issues/4326
+
+
+#### ModelPack
+
+##### Unified transformer specification and its auto-generation method for the existing models
+
+- Description: Transformer is the dominant architecture for modern LLMs, and its design has largely converged. For example, most state-of-the-art open-source models adopt GQA/MLA for the Attention layer and MoE for the MLP layer. As a result, a Transformer can be viewed as a composition of standardized building blocks. This enables further abstraction of a unified architectural specification across different open-source models, which can serve as the Transformer specification in ModelPack. Based on this specification, many valuable capabilities become possible. For inference engines, it enables automatic support for multiple Transformer models, so newly trained Transformer models can be supported without per-model adaptation.
+- Expected Outcome:
+  - Jointly complete a unified Transformer specification (an in-progress PR already exists)
+  - Using vLLM and SGLang, conduct POCs on three or more mainstream open-source Transformer models based on this specification
+  - Design a workflow or Claude skills that can automatically generate Transformer specification definitions from models in the Hugging Face transformers repository
+- Recommended Skills:
+  - Python
+  - Familiar with LLM Prompts and LLM Inference Engine
+- Expected project size: medium
+- Mentor(s):
+  - Zhao Chen (@aftersnow, zhaochen.zju@gmail.com) - primary
+  - Peng Tao (@bergwolf, bergwolf@hyper.sh)
+- Upstream Issue (URL): https://github.com/modelpack/model-spec/issues/164
+
+
+
+#### OpenKruise
+
+##### Alternative progressive delivery of deployment without changing strategy to Recreate
+
+- Description: Currently **OpenKruise Rollout** change the updateStrategy of kubernetes Deployment to Recreate during the progressive delivery. However such hack cause concerns about the risk of recreate all pods if deployment is not paused properly. This program will explore an alternative strategy that utilize the minReadySeconds and maxUnvailable knobs to control the progressive delivery of Deployment. It is hopefully a more robust way of enabling progressive delivery for native Deployment workload.
+- Expected Outcome:
+  - add an alternative implementation for progressive delivery of Deployment in OpenKruise Rollout
+  - end-to-end test cases that cover related normal rollout, rollback cases
+- Recommended Skills:
+  - Kubernetes (Intermediate)
+  - Operator Development
+  - Golang
+- Expected project size: medium
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - Zhang Zhen (@furykerry, furykerry@gmail.com) - primary
+  - Zhong Tianyun (@AiRanthem, airanthem666@gmail.com)
+- Upstream Issue (URL): https://github.com/openkruise/rollouts/issues/323
+
+
+
+#### OpenTelemetry
+
+##### OTTL stabilization and 1.0 offering
+
+- Description: This project focuses on the stabilization and creation of a 1.0 offering for the OpenTelemetry Transformation Language (OTTL) within the OpenTelemetry Collector. OTTL is a domain-specific language used to transform telemetry data as it passes through the collector. The goal is to bring OTTL to a stable 1.0 state by addressing a series of identified improvements and feature gaps. This includes enhancing the language's expressiveness with features like looping support (e.g., iterating over maps and slices) and refining the type system to ensure robustness and ease of use. The mentee will work on language implementation in Go, participate in design discussions, and contribute to the stabilization of the language. This is a great opportunity to learn about language design, compilers, and the internals of a high-performance observability tool.
+- Expected Outcome:
+  - Implementation of key features such as looping support and type system enhancements.
+  - Resolution of stabilization issues identified in the path to 1.0.
+  - Improved test coverage and documentation for new and existing OTTL features.
+  - Contribution to the OTTL specification and design proposals.
+- Recommended Skills: Go, understanding of data structures, interest in language design and parsing.
+- Expected project size: large (~350 hour projects)
+- Mentor(s):
+  - Ridwan Sharif (@ridwanmsharif, ridwanmsharif@google.com) - primary
+  - Braydon Kains (@braydonk, braydonk@google.com)
+- Upstream Issue (URL): 
+  - https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/30800
+  - https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/45365
+
+
+
+#### OSCAL Compass
+
+##### OSCAL documents signing
+
+- Description: CNCF OSCAL Compass trestle provides means to author and validate OSCAL documents including catalogs, profiles, component definitions and such. There is currently no standardized way to sign same. Needed is to define the signing goals and trust model, choosing the signing and envelope standards, and the implementation of signing during artifact generation. Also needed are key management and identity, verification support, and provenance metadata support. See upstream issue for more details.
+
+- Expected Outcome:
+  - trestle code to sign and verify signing of OSCAL documents
+  - clear error messages for failures
+  - sufficient test case coverage
+  - documentation
+  - tutorial
+- Recommended Skills:
+  - Python
+- Expected project size: large
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - Lou DeGenaro (@degenaro, lou.degenaro@gmail.com) - primary
+  - Chris Butler (@butler54, chris.butler@redhat.com)
+  - Vikas Agarwal (@vikas-agarwal76, avikas@in.ibm.com)
+- Upstream Issue (URL): https://github.com/oscal-compass/compliance-trestle/issues/2037
+
+
+#### PipeCD
+
+##### GCP Cloud Run plugin for pipedv1
+
+- Description: PipeCD v1 - the new version based on a plugin architecture (ref: [PipeCD plugin-arch overview blog](https://pipecd.dev/blog/2024/11/28/overview-of-the-plan-for-pluginnable-pipecd/)), has released an alpha version, and we are rapidly adding features supported in v0. We need to develop a plugin for PipeCD v1 to support [GCP Cloud Run](https://cloud.google.com/run) deployment. In PipeCD v0, the support for GCP Cloud Run deployment is built in piped source directly (ref [PipeCD Cloud Run deployment](https://pipecd.dev/docs-v0.55.x/user-guide/managing-application/defining-app-configuration/cloudrun/)), the idea is to move the Cloud Run deployment support to the plugin to make it easier to maintain and extend.
+- Expected Outcome:
+  - CloudRun plugin for PipeCD
+  - Possible update plugin SDK while develop the plugin
+  - Possible update docs how to develop PipeCD plugin
+  - Blog about how to develop a PipeCD plugin on [https://pipecd.dev/blog/](https://pipecd.dev/blog/)
+- Recommended Skills:
+  - Golang
+  - GCP Cloud Run
+  - GitOps
+  - Continuous Delivery (CD)
+- Expected project size: Medium
+- Mentor(s):
+  - Khanh Tran (@khanhtc1202, khanhtc1202@gmail.com)
+  - Shinnosuke Sawada-Dazai (@Warashi, shin@warashi.dev)
+- Upstream Issue:
+  - https://github.com/pipe-cd/pipecd/issues/6114
+
+#### WasmEdge
+
+##### Implement Custom Section Parsing and Branch Hinting proposal
+
+- Description: As discussed in the [WasmEdge January 2026 community meeting](https://youtu.be/MKOHVU1VBzg), some toolchains may want to apply the branch hinting proposal. However, WasmEdge is currently unable to implement it due to the lack of custom section parsing. In this program, we aim to incorporate custom section parsing and branch hinting into the WasmEdge toolchain.
+- Expected Outcome:
+  - A series of test cases that verify the behavior of the custom section parsing and branch hinting proposal
+  - An implementation of these defined features
+  - A document discussing the design decisions and how to use them
+- Recommended Skills:
+  - C++
+  - WebAssembly
+- Expected project size: large
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - YiYing He (@q82419, yiying@secondstate.io) - primary
+  - Hung-Ying, Tai (@hydai, hydai@secondstate.io)
+- Upstream Issue (URL): https://github.com/WasmEdge/WasmEdge/issues/4517
+
+
+##### Refine the WASM instruction structure in WasmEdge
+
+- Description: According to the definition of WASM instructions, there are variety of immediates in every instructions. And in WasmEdge data structures currently, the immediates data of each instructions is packaged in the instruction class. This causes the situation that the instruction class should have the enough size to fit both the instructions with large and small size of immediates, and the runtime memory usage is wasted. In this program, we expect the mentee to refactor the data structures to split the instruction OpCode vector and the immediates data buffer vector to refine the memory usage of WasmEdge.
+- Expected Outcome:
+  - Refactor the instruction class to split the OpCode vector and immediates data
+  - Update all tests which contain the instruction class and pass all tests
+  - Perf the memory usage to prove the implementation
+- Recommended Skills:
+  - C/C++
+  - WebAssembly
+- Expected project size: large
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - YiYing He (@q82419, yiying@secondstate.io) - primary
+  - Hung-Ying, Tai (@hydai, hydai@secondstate.io)
+- Upstream Issue (URL): https://github.com/WasmEdge/WasmEdge/issues/4558
+
+
+##### WASM Exception-Handling proposal for AOT/JIT in WasmEdge
+
+- Description: The exception-handling proposal is merged into the WASM spec version 3.0. In WasmEdge, we supported the interpreter mode. Since the WASM 3.0 become the default WASM standard currently, we should implement the AOT/JIT mode of this proposal for the completion of the WASM 3.0. In this program, we expect the mentee to implement the exception-handling proposal in AOT/JIT and pass the spec tests.
+- Expected Outcome:
+  - Implement the AOT/JIT of exception-handling proposal according to the WASM spec
+  - Pass the spec tests
+- Recommended Skills:
+  - C/C++
+  - WebAssembly
+  - LLVM
+- Expected project size: large
+- Mentor(s): #For GSoC, it is **required** to have at least 2 mentors with 1 being a primary mentor.
+  - YiYing He (@q82419, yiying@secondstate.io) - primary
+  - Hung-Ying, Tai (@hydai, hydai@secondstate.io)
+- Upstream Issue (URL): https://github.com/WasmEdge/WasmEdge/issues/4557
