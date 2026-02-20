@@ -2,3 +2,7 @@ venv/
 __pycache__/
 *.pyc
 .claude/
+web/node_modules/
+web/.next/
+web/out/
+web/public/search-index.json
