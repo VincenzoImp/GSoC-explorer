@@ -6,7 +6,8 @@ import { getStats } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "About the GSoC 2026 Explorer — how the data was collected.",
+  description:
+    "About the GSoC 2026 Explorer — why it exists and how it works.",
 };
 
 export default function AboutPage() {
@@ -16,15 +17,77 @@ export default function AboutPage() {
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <h1 className="text-3xl font-bold">About</h1>
       <p className="mt-3 text-lg text-muted-foreground">
-        GSoC 2026 Explorer is an open-source tool that aggregates all
-        organizations and project ideas from Google Summer of Code 2026 into a
-        single, searchable interface.
+        GSoC 2026 Explorer is an open-source platform that brings together all{" "}
+        <strong className="text-foreground">{stats.totalOrgs}</strong>{" "}
+        organizations and their project ideas from{" "}
+        <a
+          href="https://summerofcode.withgoogle.com/programs/2026/organizations"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-foreground underline underline-offset-4"
+        >
+          Google Summer of Code 2026
+        </a>{" "}
+        into a single, searchable, and filterable interface.
       </p>
 
       <Separator className="my-8" />
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Data Overview</h2>
+        <h2 className="text-xl font-semibold">
+          Why use this instead of the official site?
+        </h2>
+        <p className="text-muted-foreground">
+          The official GSoC website lists organizations but links out to
+          external pages for project ideas — scattered across Google Docs,
+          GitHub wikis, GitLab issues, and various websites. This makes it hard
+          to search, compare, and explore what&apos;s available.
+        </p>
+        <p className="text-muted-foreground">
+          GSoC 2026 Explorer solves this by:
+        </p>
+        <ul className="list-inside list-disc space-y-2 text-muted-foreground">
+          <li>
+            <strong className="text-foreground">
+              Full-text search across everything
+            </strong>{" "}
+            — press Cmd+K (or Ctrl+K) to search across all organization names,
+            descriptions, technologies, topics, and project ideas content at
+            once
+          </li>
+          <li>
+            <strong className="text-foreground">Advanced combined filters</strong>{" "}
+            — filter by technology and topic tags simultaneously, with shareable
+            URLs (e.g. <code className="text-xs">?tech=python&topic=web</code>)
+          </li>
+          <li>
+            <strong className="text-foreground">
+              All ideas in one place
+            </strong>{" "}
+            — every ideas page has been scraped and rendered in a consistent
+            format, with table of contents for easy navigation
+          </li>
+          <li>
+            <strong className="text-foreground">
+              LLM-ready structured data
+            </strong>{" "}
+            — the repository contains all data in JSON and Markdown, ready to be
+            fed to language models for analyzing opportunities, matching skills,
+            or generating summaries
+          </li>
+          <li>
+            <strong className="text-foreground">
+              Fast and responsive
+            </strong>{" "}
+            — static site with instant filtering, dark mode, and no page reloads
+          </li>
+        </ul>
+      </section>
+
+      <Separator className="my-8" />
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Data overview</h2>
         <ul className="list-inside list-disc space-y-1 text-muted-foreground">
           <li>
             <strong className="text-foreground">{stats.totalOrgs}</strong>{" "}
@@ -78,9 +141,10 @@ export default function AboutPage() {
       <Separator className="my-8" />
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Source Code</h2>
+        <h2 className="text-xl font-semibold">Source code</h2>
         <p className="text-muted-foreground">
-          Both the scraper and this website are open source.
+          Both the scraper and this website are open source. The repository also
+          contains the raw scraped data in Markdown and JSON format.
         </p>
         <a
           href={SITE.repo}

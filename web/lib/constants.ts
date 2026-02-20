@@ -1,9 +1,9 @@
 export const SITE = {
   title: "GSoC 2026 Explorer",
   description:
-    "Browse, search, and filter all 185 organizations and project ideas for Google Summer of Code 2026.",
+    "A better way to explore Google Summer of Code 2026: search, filter, and browse all 185 organizations and their project ideas in one place.",
   url: "https://gsoc-2026.vercel.app",
-  repo: "https://github.com/VincenzoImp/gsoc",
+  repo: "https://github.com/VincenzoImp/GSoC-explorer",
 } as const;
 
 const TAG_COLORS = [

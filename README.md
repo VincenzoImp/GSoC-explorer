@@ -1,8 +1,40 @@
-# GSoC 2026 — Organizations & Project Ideas
+# GSoC 2026 Explorer
 
-All **185** organizations participating in [Google Summer of Code 2026](https://summerofcode.withgoogle.com/programs/2026/organizations), with their project ideas scraped and collected in one place.
+A better way to explore [Google Summer of Code 2026](https://summerofcode.withgoogle.com/programs/2026/organizations). All **185** organizations and their project ideas in one place — with full-text search, advanced filters, and a unified reading experience.
 
 > **184** out of 185 ideas pages successfully scraped — **260** technologies — **509** topics
+
+## Why this exists
+
+The official GSoC website lists organizations but links out to external pages for project ideas — scattered across Google Docs, GitHub wikis, GitLab issues, and various websites. This makes it hard to search, compare, and explore what's available.
+
+**GSoC 2026 Explorer** solves this:
+
+- **Full-text search** — search across all organization names, descriptions, technologies, topics, and project ideas content at once (Cmd+K / Ctrl+K)
+- **Advanced combined filters** — filter by technology and topic tags simultaneously, with shareable URLs
+- **All ideas in one place** — every ideas page scraped and rendered in a consistent format, with table of contents
+- **LLM-ready data** — all data available in JSON and Markdown, ready to feed to language models for analyzing opportunities, matching skills, or generating summaries
+- **Fast and responsive** — static site with instant filtering, dark mode, and no page reloads
+
+## Website
+
+**[gsoc-2026.vercel.app](https://gsoc-2026.vercel.app)**
+
+To run locally:
+
+```bash
+cd web && npm install && npm run build && npx serve out
+```
+
+## Repository structure
+
+| Path | Description |
+|---|---|
+| [`organizations/`](organizations/) | Overview of each organization (tech, topics, links) |
+| [`ideas/`](ideas/) | Scraped project ideas in Markdown |
+| [`data/`](data/) | JSON data for programmatic access and LLM consumption |
+| [`scraper/`](scraper/) | Python scraper source code |
+| [`web/`](web/) | Next.js website source code |
 
 ## Organizations
 
@@ -194,7 +226,7 @@ All **185** organizations participating in [Google Summer of Code 2026](https://
 | 184 | [Wikimedia Foundation](organizations/wikimedia_foundation.md) | javascript, html, php, css | [View Ideas](ideas/wikimedia_foundation.md) |
 | 185 | [Zulip](organizations/zulip.md) | python, django, flutter, css | [View Ideas](ideas/zulip.md) |
 
-## How this data was collected
+## How the data was collected
 
 A Python scraper queries the [GSoC public API](https://summerofcode.withgoogle.com/api/program/2026/organizations/), then fetches each organization's ideas page and converts it to Markdown:
 
@@ -205,31 +237,6 @@ A Python scraper queries the [GSoC public API](https://summerofcode.withgoogle.c
 - **JS-rendered pages** are handled by [Playwright](https://playwright.dev/) headless browser
 
 See [`scraper/`](scraper/) for the source code.
-
-## Repository structure
-
-| Path | Description |
-|---|---|
-| [`organizations/`](organizations/) | Overview of each organization (tech, topics, links) |
-| [`ideas/`](ideas/) | Scraped project ideas in Markdown |
-| [`data/`](data/) | JSON data for programmatic access |
-| [`scraper/`](scraper/) | Scraper source code and requirements |
-| [`web/`](web/) | Next.js website for browsing and searching |
-
-## Website
-
-A static website built with Next.js allows browsing, filtering, and searching all organizations and project ideas. Features include:
-
-- Full-text search across all organizations and ideas (Cmd+K)
-- Filter by technology and topic tags
-- Rendered Markdown with table of contents for each ideas page
-- Responsive design, works on mobile
-
-To run locally:
-
-```bash
-cd web && npm install && npm run build && npx serve out
-```
 
 ## License
 

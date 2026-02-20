@@ -17,8 +17,7 @@ export default function HomePage() {
           GSoC 2026 Explorer
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Browse, search, and filter all {stats.totalOrgs} organizations
-          and their project ideas for{" "}
+          A better way to explore{" "}
           <a
             href="https://summerofcode.withgoogle.com/programs/2026/organizations"
             target="_blank"
@@ -27,7 +26,9 @@ export default function HomePage() {
           >
             Google Summer of Code 2026
           </a>
-          .
+          . All {stats.totalOrgs} organizations and their project ideas in one
+          place — with full-text search, advanced filters, and a unified reading
+          experience.
         </p>
         <div className="mt-8 flex justify-center gap-3">
           <Button asChild size="lg">
